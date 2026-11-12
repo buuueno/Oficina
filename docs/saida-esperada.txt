@@ -1,0 +1,50 @@
+
+========== ORÇAMENTOS ==========
+Ordem 1 - Celta 2012 (Marlon)
+  Troca de óleo | mão de obra: R$ 45,00 | peças: R$ 218,00 | subtotal: R$ 263,00
+      - 4x Óleo 5W30 (R$ 180,00)
+      - 1x Filtro de óleo (R$ 38,00)
+  Alinhamento e balanceamento | mão de obra: R$ 165,00 | peças: R$ 0,00 | subtotal: R$ 165,00
+  TOTAL: R$ 428,00
+
+Ordem 2 - Gol 2018 (Anna)
+  Revisão completa + Lavagem + Leva e traz | mão de obra: R$ 560,00 | peças: R$ 840,00 | subtotal: R$ 1400,00
+      - 1x Filtro de ar (R$ 60,00)
+      - 2x Pastilha de freio (R$ 360,00)
+      - 2x Disco de freio (R$ 420,00)
+  TOTAL: R$ 1400,00
+
+
+========== PROTOTYPE - o modelo da fábrica não muda ==========
+Revisão da Anna: 3 peças
+Nova revisão saindo da fábrica: 2 peças (o disco de freio ficou só na cópia da Anna)
+
+========== STATE + OBSERVER - a ordem muda de etapa e todos são avisados ==========
+Ordem 1 está: Aberta
+> Mecânico começou a ordem 1
+  [WhatsApp 41 99999-0000] Olá, Marlon! Seu Celta está: Em andamento
+  [Painel da recepção] Ordem 1 | ABC1D23 | Em andamento
+> Mecânico terminou a ordem 1
+  [WhatsApp 41 99999-0000] Olá, Marlon! Seu Celta está: Pronta para retirada
+  [Painel da recepção] Ordem 1 | ABC1D23 | Pronta para retirada
+  [Financeiro] Ordem 1 pronta. Cobrar R$ 428,00 na retirada.
+
+========== STRATEGY - forma de pagamento ==========
+Simulação da ordem 1 (R$ 428,00):
+  Pix (5% de desconto): R$ 406,60
+  Cartão de débito: R$ 428,00
+  Crédito em 3x sem juros: R$ 428,00
+  Crédito em 10x (+5%): R$ 449,40
+> Marlon escolheu Pix
+  [WhatsApp 41 99999-0000] Olá, Marlon! Seu Celta está: Fechada
+  [Painel da recepção] Ordem 1 | ABC1D23 | Fechada
+Ordem 1 fechada. Valor pago: R$ 406,60
+Ordens no sistema: 2
+
+========== TRATAMENTO DE ERROS ==========
+Erro: A ordem 1 está "Fechada" e não aceita novos serviços.
+Erro: Tipo de serviço não cadastrado: martelinho de ouro
+Erro: Ordem de serviço não encontrada: 99
+Erro: Não é possível fechar a ordem 2: ela está "Aberta"
+Erro: Não é possível iniciar a ordem 1: ela está "Fechada"
+Erro: Parcelamento inválido: 15x (permitido de 1x a 12x)

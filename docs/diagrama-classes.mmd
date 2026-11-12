@@ -1,0 +1,132 @@
+classDiagram
+    direction LR
+
+    namespace Parte1 {
+        class OficinaService {
+            -repositorio : OrdemRepository
+            -observadores : List~ObservadorOrdem~
+            +registrarObservador(o)
+            +abrirOrdem(numero, veiculo)
+            +adicionarServico(numero, tipo)
+            +adicionarServico(numero, servico)
+            +iniciarServico(numero)
+            +concluirServico(numero)
+            +fecharOrdem(numero, forma) double
+        }
+        class OrdemRepository {
+            <<interface>>
+        }
+        class RepositorioEmMemoria
+        class Veiculo
+        class Cliente
+        class Peca
+        class TrocaDeOleo
+        class Alinhamento
+        class RevisaoCompleta
+    }
+
+    namespace Observer_e_Context_do_State {
+        class OrdemServico {
+            -estado : EstadoOrdem
+            -observadores : List~ObservadorOrdem~
+            +iniciar()
+            +concluir()
+            +fechar()
+            -mudarEstado(novo)
+            +adicionarObservador(o)
+            -notificarObservadores()
+        }
+        class ObservadorOrdem {
+            <<interface>>
+            +atualizar(ordem)
+        }
+        class NotificacaoWhatsApp
+        class PainelRecepcao
+        class Financeiro
+    }
+
+    namespace Prototype_e_Factory {
+        class Servico {
+            <<abstract>>
+            #pecas : List~Peca~
+            +calcularMaoDeObra()* double
+            +calcularValor() double
+            +clonar() Servico
+        }
+        class ServicoFactory {
+            -modelos : Map~String,Servico~
+            +criar(tipo)$ Servico
+        }
+    }
+
+    namespace Decorator {
+        class ServicoAdicional {
+            <<abstract>>
+            #servico : Servico
+        }
+        class Lavagem
+        class LevaETraz
+    }
+
+    namespace State {
+        class EstadoOrdem {
+            <<abstract>>
+            +getDescricao()* String
+            +aceitaServicos() boolean
+            +iniciar(ordem) EstadoOrdem
+            +concluir(ordem) EstadoOrdem
+            +fechar(ordem) EstadoOrdem
+        }
+        class Aberta
+        class EmAndamento
+        class Pronta
+        class Fechada
+    }
+
+    namespace Strategy {
+        class FormaPagamento {
+            <<interface>>
+            +getNome() String
+            +calcularValorFinal(valor) double
+        }
+        class PagamentoPix
+        class PagamentoDebito
+        class PagamentoCredito {
+            -parcelas : int
+        }
+    }
+
+    OficinaService --> OrdemRepository
+    OrdemRepository <|.. RepositorioEmMemoria
+    OficinaService ..> ServicoFactory : cria serviços
+    OficinaService ..> FormaPagamento : fecharOrdem
+    RepositorioEmMemoria o--> "*" OrdemServico
+
+    OrdemServico --> Veiculo
+    Veiculo --> Cliente : proprietario
+    OrdemServico o--> "*" Servico
+    OrdemServico o--> "*" ObservadorOrdem : avisa
+    ObservadorOrdem <|.. NotificacaoWhatsApp
+    ObservadorOrdem <|.. PainelRecepcao
+    ObservadorOrdem <|.. Financeiro
+
+    Servico <|-- TrocaDeOleo
+    Servico <|-- Alinhamento
+    Servico <|-- RevisaoCompleta
+    Servico o--> "*" Peca
+    ServicoFactory o--> "*" Servico : modelos (protótipos)
+
+    Servico <|-- ServicoAdicional
+    ServicoAdicional o--> "1" Servico : embrulha
+    ServicoAdicional <|-- Lavagem
+    ServicoAdicional <|-- LevaETraz
+
+    OrdemServico o--> "1" EstadoOrdem : estado atual
+    EstadoOrdem <|-- Aberta
+    EstadoOrdem <|-- EmAndamento
+    EstadoOrdem <|-- Pronta
+    EstadoOrdem <|-- Fechada
+
+    FormaPagamento <|.. PagamentoPix
+    FormaPagamento <|.. PagamentoDebito
+    FormaPagamento <|.. PagamentoCredito
